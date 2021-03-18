@@ -221,7 +221,7 @@ Begin VB.Form frmMain
       Caption         =   "RunTime"
       ForeColor       =   &H00FFC0FF&
       Height          =   255
-      Left            =   4320
+      Left            =   120
       TabIndex        =   14
       Top             =   1200
       Width           =   3015
@@ -241,7 +241,7 @@ Begin VB.Form frmMain
       Caption         =   "Up_Time"
       ForeColor       =   &H00FFC0FF&
       Height          =   255
-      Left            =   4320
+      Left            =   120
       TabIndex        =   10
       Top             =   960
       Width           =   3015
