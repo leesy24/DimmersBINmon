@@ -281,7 +281,7 @@ Private Declare Sub CopyMemory Lib "kernel32" _
                                            ByVal cbCopy As Long)
 
 Private Const relVersion = "v1.00.00"
-Private Const relDate = "2021-03-18"
+Private Const relDate = "2021-03-23"
 
 Const NUM_OF_BIN = 6
 
