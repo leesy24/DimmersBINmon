@@ -473,6 +473,8 @@ Public avrSUM As Double
 Public avrCNT As Integer
 Public avrMAX As Double
 Public avrMIN As Double
+Public avrAVR, avrMID As Double
+
 Public maxHH As Long
 Public minLH As Long
 Public avrAOd As Integer
@@ -969,11 +971,20 @@ Dim X1, Y1, X2, Y2 As Double
     ''''''
     avr12H = maxY
     If avrCNT >= 3 Then
-        avr1 = avrMIN + ((avrMAX + avrMIN) / 2 - avrMIN) * 20 / 100
+        avrAVR = avrSUM / avrCNT
+        avrMID = (avrMAX + avrMIN) / 2
+        If ((avrMID / avrAVR) < 0.9) Then '' 0.85
+        '' skip 10% of data on min
+            avr1 = avrMIN + (avrMAX - avrMIN) * 10 / 100
+        Else
+            avr1 = avrMIN
+        End If
         avrSUM = 0
         avrCNT = 0
         For k = 10 To 90
             If ((y(k) >= avr1) And _
+                Sqr((x(k - 1) - x(k)) ^ 2 + (y(k - 1) - y(k)) ^ 2) < 1000 And _
+                Sqr((x(k) - x(k + 1)) ^ 2 + (y(k) - y(k + 1)) ^ 2) < 1000 And _
                 Abs((y(k - 1) - y(k)) / (x(k - 1) - x(k))) <= 1.3 And _
                 Abs((y(k) - y(k + 1)) / (x(k) - x(k + 1))) <= 1.3 _
                 ) Then
