@@ -16,7 +16,7 @@ Begin VB.Form frmSettings
       Height          =   270
       Left            =   1320
       TabIndex        =   5
-      Text            =   "500"
+      Text            =   "600"
       Top             =   1980
       Width           =   615
    End
@@ -24,7 +24,7 @@ Begin VB.Form frmSettings
       Height          =   270
       Left            =   1320
       TabIndex        =   4
-      Text            =   "2000"
+      Text            =   "1200"
       Top             =   1620
       Width           =   615
    End
@@ -103,7 +103,7 @@ Begin VB.Form frmSettings
       Width           =   975
    End
    Begin VB.Label lbBinMinLH_ 
-      Caption         =   "0~500"
+      Caption         =   "0~600"
       Height          =   255
       Left            =   2400
       TabIndex        =   18
@@ -119,7 +119,7 @@ Begin VB.Form frmSettings
       Width           =   975
    End
    Begin VB.Label lbBinMaxHH_ 
-      Caption         =   "1700~2000"
+      Caption         =   "600~1200"
       Height          =   255
       Left            =   2400
       TabIndex        =   16
@@ -212,8 +212,8 @@ Public Sub Init(Index_I%, Title_I$, BinIPAddr_I$, BinIPPort_I$, BinAngle_I%, Sen
 '
     frmSettings.Caption = Title_I$ & " 설정"
 '
-    lbBinMaxHH_.Caption = MAX_DEEPS_OF_BIN * 0.8 & "~" & MAX_DEEPS_OF_BIN
-    lbBinMinLH_.Caption = "0~" & MAX_DEEPS_OF_BIN * 0.2
+    lbBinMaxHH_.Caption = MAX_DEEPS_OF_BIN * 0.5 & "~" & MAX_DEEPS_OF_BIN
+    lbBinMinLH_.Caption = "0~" & MAX_DEEPS_OF_BIN * 0.5
 '
     orgBinIPAddr = BinIPAddr_I
     txtBinIPAddr = BinIPAddr_I
@@ -311,9 +311,9 @@ Private Sub cmdSettingsApply_Click()
     If txtBinMaxHH <> orgBinMaxHH Then
         If IsNumeric(txtBinMaxHH) = False _
             Or CSng(CInt(Val(txtBinMaxHH))) <> CSng(Val(txtBinMaxHH)) _
-            Or CInt(Val(txtBinMaxHH)) > MAX_DEEPS_OF_BIN Or CInt(Val(txtBinMaxHH)) < MAX_DEEPS_OF_BIN * 0.8 _
+            Or CInt(Val(txtBinMaxHH)) > MAX_DEEPS_OF_BIN Or CInt(Val(txtBinMaxHH)) < MAX_DEEPS_OF_BIN * 0.5 _
             Then
-            MsgBox lbBinMaxHH & "는 " & MAX_DEEPS_OF_BIN * 0.8 & " ~ " & MAX_DEEPS_OF_BIN & " 사이의 cm단위의 정수 값 이어야 합니다.", vbOKOnly
+            MsgBox lbBinMaxHH & "는 " & MAX_DEEPS_OF_BIN * 0.5 & " ~ " & MAX_DEEPS_OF_BIN & " 사이의 cm단위의 정수 값 이어야 합니다.", vbOKOnly
             isError_cmdSettingsApply = True
         Else
             orgBinMaxHH = txtBinMaxHH
@@ -323,9 +323,9 @@ Private Sub cmdSettingsApply_Click()
     If txtBinMinLH <> orgBinMinLH Then
         If IsNumeric(txtBinMinLH) = False _
             Or CSng(CInt(Val(txtBinMinLH))) <> CSng(Val(txtBinMinLH)) _
-            Or CInt(Val(txtBinMinLH)) > MAX_DEEPS_OF_BIN * 0.2 Or CInt(Val(txtBinMinLH)) < 0! _
+            Or CInt(Val(txtBinMinLH)) > MAX_DEEPS_OF_BIN * 0.5 Or CInt(Val(txtBinMinLH)) < 0! _
             Then
-            MsgBox lbBinMinLH & "는 0 ~ " & MAX_DEEPS_OF_BIN * 0.2 & " 사이의 cm단위의 정수 값 이어야 합니다.", vbOKOnly
+            MsgBox lbBinMinLH & "는 0 ~ " & MAX_DEEPS_OF_BIN * 0.5 & " 사이의 cm단위의 정수 값 이어야 합니다.", vbOKOnly
             isError_cmdSettingsApply = True
         Else
             orgBinMinLH = txtBinMinLH
