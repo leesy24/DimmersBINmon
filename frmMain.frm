@@ -280,8 +280,8 @@ Private Declare Sub CopyMemory Lib "kernel32" _
                                            hpvSource As Any, _
                                            ByVal cbCopy As Long)
 
-Private Const relVersion = "v1.00.00"
-Private Const relDate = "2021-03-23"
+Private Const relVersion = "v1.00.01"
+Private Const relDate = "2021-05-21"
 
 Const NUM_OF_BIN = 6
 
