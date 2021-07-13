@@ -424,6 +424,7 @@ Private Sub lbBinNO2_Click(Index As Integer)
     frmSettings.Init _
         Index _
         , lbBinNO2(Index).Caption _
+        , frmMain.ucBINdps1(Index).BinName _
         , frmMain.ucBINdps1(Index).ipAddr _
         , frmMain.ucBINdps1(Index).ipPort _
         , frmMain.ucBINdps1(Index).BinAngle _

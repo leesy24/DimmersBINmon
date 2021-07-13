@@ -422,6 +422,8 @@ Public Event upDXY()
 
 
 Private UCindex As Integer
+Public BinName As String
+
 Private swN As Integer
 
 Private wsACT As Boolean
@@ -1438,13 +1440,9 @@ End Sub
 
 
 
-Public Sub setBinID()
-    cmdCONN.Caption = UCindex + 1 & ") " & "Á¶±¤Á¶BIN-" & (UCindex + 1)  ''0~7
-    
-    If UCindex = 20 Then
-        cmdCONN.Caption = UCindex + 1 & ") " & "TestBIN"
-    End If
-    
+Public Sub setBinID(BinName_I As String)
+    BinName = BinName_I
+    cmdCONN.Caption = UCindex + 1 & ") " & BinName
 End Sub
 
 

@@ -596,8 +596,17 @@ Dim j As Integer
     Next i
     
     
+    Dim BinName As String
     For i = 0 To NUM_OF_BIN - 1
-        ucBINdps1(i).setBinID
+        BinName = GetSetting(App.Title, "Settings", "BinName_" & i, "Fail")
+        If BinName = "Fail" Then
+            If i < 3 Then
+                BinName = "3±â-Á¶±¤Á¶-" & i + 1
+            Else
+                BinName = "4±â-Á¶±¤Á¶-" & i - 3 + 1
+            End If
+        End If
+        ucBINdps1(i).setBinID BinName
         ''ucBINdps1(i).picCON_Cir1
         ''
         cboIDX.AddItem i + 1
