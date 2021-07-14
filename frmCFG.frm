@@ -16,14 +16,14 @@ Begin VB.Form frmCFG
       Caption         =   "센서 종류 설정"
       Height          =   2415
       Left            =   240
-      TabIndex        =   12
+      TabIndex        =   10
       Top             =   1800
       Width           =   11175
       Begin VB.TextBox txtCtypes 
          Height          =   270
          Index           =   0
          Left            =   1680
-         TabIndex        =   6
+         TabIndex        =   5
          Top             =   310
          Width           =   615
       End
@@ -32,7 +32,7 @@ Begin VB.Form frmCFG
          Height          =   375
          Left            =   10080
          Style           =   1  '그래픽
-         TabIndex        =   14
+         TabIndex        =   12
          Top             =   1920
          Width           =   975
       End
@@ -41,7 +41,7 @@ Begin VB.Form frmCFG
          Height          =   255
          Index           =   0
          Left            =   240
-         TabIndex        =   13
+         TabIndex        =   11
          Top             =   360
          Width           =   1455
       End
@@ -50,31 +50,31 @@ Begin VB.Form frmCFG
       Caption         =   "시스템 설정"
       Height          =   1455
       Left            =   240
-      TabIndex        =   7
+      TabIndex        =   6
       Top             =   240
       Width           =   11175
       Begin VB.CheckBox chkUsePLC 
          Caption         =   "PLC 이용"
          Height          =   255
-         Left            =   2880
-         TabIndex        =   18
+         Left            =   360
+         TabIndex        =   16
          Top             =   360
          Width           =   1575
       End
       Begin VB.TextBox txtPLCDataRangeMax 
          Enabled         =   0   'False
          Height          =   270
-         Left            =   8160
-         TabIndex        =   4
+         Left            =   6840
+         TabIndex        =   3
          Text            =   "32767"
-         Top             =   1030
+         Top             =   675
          Width           =   615
       End
       Begin VB.TextBox txtPLCIPPort2 
          Enabled         =   0   'False
          Height          =   270
-         Left            =   5760
-         TabIndex        =   3
+         Left            =   3240
+         TabIndex        =   2
          Text            =   "99999"
          Top             =   1030
          Width           =   615
@@ -84,23 +84,15 @@ Begin VB.Form frmCFG
          Height          =   375
          Left            =   10080
          Style           =   1  '그래픽
-         TabIndex        =   5
+         TabIndex        =   4
          Top             =   960
          Width           =   975
-      End
-      Begin VB.TextBox txtAVRcnt 
-         Height          =   270
-         Left            =   1680
-         TabIndex        =   0
-         Text            =   "99"
-         Top             =   315
-         Width           =   735
       End
       Begin VB.TextBox txtPLCIPAddr 
          Enabled         =   0   'False
          Height          =   270
-         Left            =   5760
-         TabIndex        =   1
+         Left            =   3240
+         TabIndex        =   0
          Text            =   "255.255.255.255"
          Top             =   310
          Width           =   1455
@@ -108,8 +100,8 @@ Begin VB.Form frmCFG
       Begin VB.TextBox txtPLCIPPort1 
          Enabled         =   0   'False
          Height          =   270
-         Left            =   5760
-         TabIndex        =   2
+         Left            =   3240
+         TabIndex        =   1
          Text            =   "99999"
          Top             =   670
          Width           =   615
@@ -118,35 +110,26 @@ Begin VB.Form frmCFG
          Alignment       =   1  '오른쪽 맞춤
          Caption         =   "(100~32767)"
          Height          =   255
-         Left            =   6840
-         TabIndex        =   17
-         Top             =   1080
+         Left            =   5520
+         TabIndex        =   15
+         Top             =   720
          Width           =   1215
       End
       Begin VB.Label lbPLCDataRangeMax 
          Alignment       =   1  '오른쪽 맞춤
          Caption         =   "PLC Data range max."
          Height          =   255
-         Left            =   6600
-         TabIndex        =   16
-         Top             =   720
-         Width           =   2175
-      End
-      Begin VB.Label lbAVRcnt 
-         Alignment       =   1  '오른쪽 맞춤
-         Caption         =   "누적횟수"
-         Height          =   255
-         Left            =   720
-         TabIndex        =   11
+         Left            =   5280
+         TabIndex        =   14
          Top             =   360
-         Width           =   855
+         Width           =   2175
       End
       Begin VB.Label lbPLCIPAddr 
          Alignment       =   1  '오른쪽 맞춤
          Caption         =   "PLC IP addr."
          Height          =   255
-         Left            =   4440
-         TabIndex        =   10
+         Left            =   1920
+         TabIndex        =   9
          Top             =   360
          Width           =   1215
       End
@@ -154,8 +137,8 @@ Begin VB.Form frmCFG
          Alignment       =   1  '오른쪽 맞춤
          Caption         =   "PLC IP port 1"
          Height          =   255
-         Left            =   4320
-         TabIndex        =   9
+         Left            =   1800
+         TabIndex        =   8
          Top             =   720
          Width           =   1335
       End
@@ -163,8 +146,8 @@ Begin VB.Form frmCFG
          Alignment       =   1  '오른쪽 맞춤
          Caption         =   "PLC IP port 2"
          Height          =   255
-         Left            =   4320
-         TabIndex        =   8
+         Left            =   1800
+         TabIndex        =   7
          Top             =   1080
          Width           =   1335
       End
@@ -173,7 +156,7 @@ Begin VB.Form frmCFG
       Caption         =   "닫 기"
       Height          =   375
       Left            =   10200
-      TabIndex        =   15
+      TabIndex        =   13
       Top             =   4320
       Width           =   1215
    End
@@ -251,22 +234,22 @@ Private Sub cmdSetSYSTEM_Click()
     
     isError_cmdSetSYSTEM = False
    
-    If (Val(txtAVRcnt) <> frmMain.AOdeepMAX) Then
-        IsValid = True
-        
-        If (Val(txtAVRcnt) < 10) Or (Val(txtAVRcnt) > 99) Then
-            MsgBox lbAVRcnt & "는 10 이상 99 이하 이어야 합니다.", vbOKOnly
-            IsValid = False
-            isError_cmdSetSYSTEM = True
-        End If
-        
-        If (IsValid = True) Then
-            SaveSetting App.Title, "Settings", "DeepMax", Val(txtAVRcnt)
-            frmMain.AOdeepFull = False
-            frmMain.AOdeepCNT = 0
-            frmMain.AOdeepMAX = Val(txtAVRcnt)
-        End If
-    End If
+    'If (Val(txtAVRcnt) <> frmMain.AOdeepMAX) Then
+    '    IsValid = True
+    '
+    '    If (Val(txtAVRcnt) < 10) Or (Val(txtAVRcnt) > 99) Then
+    '        MsgBox lbAVRcnt & "는 10 이상 99 이하 이어야 합니다.", vbOKOnly
+    '        IsValid = False
+    '        isError_cmdSetSYSTEM = True
+    '    End If
+    '
+    '    If (IsValid = True) Then
+    '        SaveSetting App.Title, "Settings", "DeepMax", Val(txtAVRcnt)
+    '        frmMain.AOdeepFull = False
+    '        frmMain.AOdeepCNT = 0
+    '        frmMain.AOdeepMAX = Val(txtAVRcnt)
+    '    End If
+    'End If
     
     If (chkUsePLC.Value <> frmMain.chkUsePLC) Then
         SaveSetting App.Title, "Settings", "UsePLC", chkUsePLC.Value
@@ -360,7 +343,7 @@ Private Sub Form_Load()
     Dim iLeft As Long
     Dim iTop As Long
 
-    txtAVRcnt = frmMain.AOdeepMAX
+    'txtAVRcnt = frmMain.AOdeepMAX
     
     chkUsePLC.Value = frmMain.chkUsePLC
     If (chkUsePLC.Value = 1) Then
@@ -430,7 +413,8 @@ Private Sub lbBinNO2_Click(Index As Integer)
         , frmMain.ucBINdps1(Index).BinAngle _
         , frmMain.ucBINdps1(Index).SensorAngle _
         , frmMain.ucBINdps1(Index).maxHH _
-        , frmMain.ucBINdps1(Index).minLH
+        , frmMain.ucBINdps1(Index).minLH _
+        , frmMain.ucBINdps1(Index).AOdeepMAX
 '
     frmSettings.Visible = True
 '
@@ -478,19 +462,19 @@ Private Sub tmrCFG_Timer()
     
 End Sub
 
-Private Sub txtAVRcnt_KeyPress(KeyAscii As Integer)
-'
-    If KeyAscii = 13 Then  ' The ENTER key.
-        cmdSetSYSTEM_Update
-    End If
-'
-End Sub
+'Private Sub txtAVRcnt_KeyPress(KeyAscii As Integer)
+''
+'    If KeyAscii = 13 Then  ' The ENTER key.
+'        cmdSetSYSTEM_Update
+'    End If
+''
+'End Sub
 
-Private Sub txtAVRcnt_GotFocus()
-'
-    tmrCFG_update
-'
-End Sub
+'Private Sub txtAVRcnt_GotFocus()
+''
+'    tmrCFG_update
+''
+'End Sub
 
 Private Sub txtCtypes_KeyPress(Index As Integer, KeyAscii As Integer)
 '

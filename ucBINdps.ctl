@@ -16,7 +16,7 @@ Begin VB.UserControl ucBINdps
    Begin VB.Timer tmrHmax 
       Enabled         =   0   'False
       Left            =   1440
-      Top             =   600
+      Top             =   0
    End
    Begin VB.TextBox txtHmin 
       Alignment       =   2  '가운데 맞춤
@@ -36,7 +36,7 @@ Begin VB.UserControl ucBINdps
       BorderStyle     =   0  '없음
       Enabled         =   0   'False
       Height          =   255
-      Left            =   480
+      Left            =   660
       TabIndex        =   24
       Text            =   "0"
       Top             =   720
@@ -57,11 +57,11 @@ Begin VB.UserControl ucBINdps
       BackColor       =   &H00C0C000&
       Caption         =   "SET"
       Height          =   255
-      Left            =   1080
+      Left            =   1200
       Style           =   1  '그래픽
       TabIndex        =   22
       Top             =   720
-      Width           =   615
+      Width           =   495
    End
    Begin VB.Timer tmrWDT 
       Enabled         =   0   'False
@@ -192,7 +192,7 @@ Begin VB.UserControl ucBINdps
       Left            =   1320
       Top             =   4200
    End
-   Begin VB.TextBox txtTime1 
+   Begin VB.TextBox txtAVRcnt 
       Alignment       =   2  '가운데 맞춤
       Appearance      =   0  '평면
       BackColor       =   &H00E0E0E0&
@@ -200,9 +200,9 @@ Begin VB.UserControl ucBINdps
       Height          =   255
       Left            =   120
       TabIndex        =   7
-      Text            =   "0"
+      Text            =   "99/99"
       Top             =   720
-      Width           =   255
+      Width           =   495
    End
    Begin VB.TextBox txtMode 
       Alignment       =   2  '가운데 맞춤
@@ -420,6 +420,9 @@ Public Event Resize()
 
 Public Event upDXY()
 
+Public AOdeepCNT As Integer
+Public AOdeepMAX As Integer        ''<=MAX:99
+Public AOdeepFull As Boolean
 
 Private UCindex As Integer
 Public BinName As String
@@ -710,9 +713,9 @@ Private Sub picGET_Click()
     Next k
     
     centerXcnt = centerXcnt + 1
-    If centerXcnt > frmMain.AOdeepMAX Then
+    If centerXcnt > AOdeepMAX Then
         centerXsum = centerXsum - (centerXsum / centerXcnt)
-        centerXcnt = frmMain.AOdeepMAX
+        centerXcnt = AOdeepMAX
     End If
     centerXsum = centerXsum + (minXR + minXL) / 2
     
@@ -1134,7 +1137,7 @@ Private Sub tmrRun_Timer()
     Dim strA As String
     Dim data() As Byte
     
-    txtTime1.Text = Format(Now, "ss")  ''' "hh:mm:ss")  ''' "YYYYMMDD h:m:s")
+    'txtTime1.Text = Format(Now, "ss")  ''' "hh:mm:ss")  ''' "YYYYMMDD h:m:s")
 
     If wsock1.State = sckConnected Then
         wsACT = True
@@ -1348,6 +1351,10 @@ Private Sub tmrHmax_Timer()
 End Sub
 
 
+Public Sub txtAVRcnt_Set(Text As String)
+    txtAVRcnt = Text
+End Sub
+
 Private Sub UserControl_Initialize()
 
 Dim i As Integer
@@ -1360,7 +1367,7 @@ Dim i As Integer
     txtMode.Height = 200
     txtRnn.Height = 200
     txtRXn.Height = 200
-    txtTime1.Height = 200
+    txtAVRcnt.Height = 200
     
     txtOpX.Height = 200
     txtOpMid.Height = 200

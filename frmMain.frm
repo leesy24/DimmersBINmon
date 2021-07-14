@@ -20,21 +20,11 @@ Begin VB.Form frmMain
       Height          =   7815
       Index           =   0
       Left            =   2040
-      TabIndex        =   13
+      TabIndex        =   11
       Top             =   1440
       Width           =   1695
       _ExtentX        =   2990
       _ExtentY        =   13785
-   End
-   Begin VB.TextBox txtAVRcnt 
-      Alignment       =   2  '가운데 맞춤
-      Enabled         =   0   'False
-      Height          =   270
-      Left            =   10440
-      TabIndex        =   11
-      Text            =   "0/0"
-      Top             =   960
-      Width           =   615
    End
    Begin VB.CommandButton cmdDmon 
       Caption         =   "dMon"
@@ -80,7 +70,7 @@ Begin VB.Form frmMain
          Left            =   9720
          MaskColor       =   &H00E0E0E0&
          Style           =   1  '그래픽
-         TabIndex        =   17
+         TabIndex        =   15
          Top             =   360
          Width           =   915
       End
@@ -152,7 +142,7 @@ Begin VB.Form frmMain
          ForeColor       =   &H00E0E0E0&
          Height          =   255
          Left            =   1920
-         TabIndex        =   16
+         TabIndex        =   14
          Top             =   540
          Width           =   1695
       End
@@ -162,7 +152,7 @@ Begin VB.Form frmMain
          ForeColor       =   &H00E0E0E0&
          Height          =   255
          Left            =   1920
-         TabIndex        =   15
+         TabIndex        =   13
          Top             =   360
          Width           =   1815
       End
@@ -222,19 +212,9 @@ Begin VB.Form frmMain
       ForeColor       =   &H00FFC0FF&
       Height          =   255
       Left            =   120
-      TabIndex        =   14
+      TabIndex        =   12
       Top             =   1200
       Width           =   3015
-   End
-   Begin VB.Label Label1 
-      BackStyle       =   0  '투명
-      Caption         =   "누적횟수:"
-      ForeColor       =   &H00FFC0FF&
-      Height          =   255
-      Left            =   9600
-      TabIndex        =   12
-      Top             =   1010
-      Width           =   975
    End
    Begin VB.Label lbUpTime 
       BackStyle       =   0  '투명
@@ -300,9 +280,7 @@ Dim AOdata2(33) As Integer
 
 Dim AOdeep(20, 100) As Integer
 Dim Hdeep(20, 100) As Integer
-Public AOdeepCNT As Integer
-Public AOdeepMAX As Integer        ''<=MAX:99
-Public AOdeepFull As Boolean
+Dim AOdeepMAX(20) As Integer        ''<=MAX:99
 
 Dim BinWidth As Integer
 ''
@@ -437,13 +415,11 @@ Dim j As Integer
     
     frmMain.Move 0, 0, Screen.Width, Screen.Height
     
-    AOdeepMAX = GetSetting(App.Title, "Settings", "DeepMax", 60)
-    If AOdeepMAX < 10 Then AOdeepMAX = 10
-    If AOdeepMAX > 99 Then AOdeepMAX = 99
-    AOdeepFull = False
-    AOdeepCNT = 0
     For i = 0 To NUM_OF_BIN - 1
-        For j = 0 To 99  ''AOdeepMAX
+        AOdeepMAX(i) = GetSetting(App.Title, "Settings", "DeepMax_" & i, 20)
+        If AOdeepMAX(i) < 10 Then AOdeepMAX(i) = 10
+        If AOdeepMAX(i) > 99 Then AOdeepMAX(i) = 99
+        For j = 0 To 99
             AOdeep(i, j) = 0
             Hdeep(i, j) = 0
         Next j
@@ -500,6 +476,10 @@ Dim j As Integer
         ucBINdps1(i).Width = BinWidth  '''Width / 11 - 50
         ucBINdps1(i).Left = (i * (Width / NUM_OF_BIN)) + (Width / NUM_OF_BIN - BinWidth) / 2
         ucBINdps1(i).Height = 6100  '''12200
+        ucBINdps1(i).AOdeepMAX = AOdeepMAX(i)
+        ucBINdps1(i).AOdeepFull = False
+        ucBINdps1(i).AOdeepCNT = 0
+        ucBINdps1(i).txtAVRcnt_Set 0 & "/" & AOdeepMAX(i)
 
         ucBINdps1(i).Visible = True
 
@@ -769,20 +749,21 @@ Dim UDPiV_2(29) As Integer  '''[16bit-word] to PLC : now-Use-10/30word!
 
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''<AVR)
     For i = 0 To NUM_OF_BIN - 1
-        AOdeep(i, AOdeepCNT) = aaD(i)
-        Hdeep(i, AOdeepCNT) = aaH(i)
+        AOdeep(i, ucBINdps1(i).AOdeepCNT) = aaD(i)
+        Hdeep(i, ucBINdps1(i).AOdeepCNT) = aaH(i)
     Next i
     ''
-    AOdeepCNT = AOdeepCNT + 1
-    ''
-    If AOdeepCNT >= AOdeepMAX Then  ''99
-        If AOdeepFull = False Then
-            txtAVRcnt = AOdeepCNT & "/" & AOdeepMAX
-            AOdeepFull = True
+    For i = 0 To NUM_OF_BIN - 1
+        ucBINdps1(i).AOdeepCNT = ucBINdps1(i).AOdeepCNT + 1
+        ''
+        If ucBINdps1(i).AOdeepCNT >= ucBINdps1(i).AOdeepMAX Then  ''99
+            If ucBINdps1(i).AOdeepFull = False Then
+                'ucBINdps1(i).txtAVRcnt_Set ucBINdps1(i).AOdeepCNT & "/" & ucBINdps1(i).AOdeepMAX
+                ucBINdps1(i).AOdeepFull = True
+            End If
+            ucBINdps1(i).AOdeepCNT = 0       ''''Loop!
         End If
-        AOdeepCNT = 0       ''''Loop!
-    End If
-
+    Next i
 
     For i = 0 To NUM_OF_BIN - 1
         avrDsum(i) = 0
@@ -790,36 +771,33 @@ Dim UDPiV_2(29) As Integer  '''[16bit-word] to PLC : now-Use-10/30word!
     Next i
     
     ''//??????????
-    If AOdeepFull = True Then
+    For i = 0 To NUM_OF_BIN - 1
     ''
-        For i = 0 To NUM_OF_BIN - 1
-            For j = 0 To AOdeepMAX - 1
+        If ucBINdps1(i).AOdeepFull = True Then
+            ucBINdps1(i).txtAVRcnt_Set ucBINdps1(i).AOdeepCNT & "/" & ucBINdps1(i).AOdeepMAX
+            For j = 0 To ucBINdps1(i).AOdeepMAX - 1
                 avrDsum(i) = avrDsum(i) + AOdeep(i, j)
                 avrHsum(i) = avrHsum(i) + Hdeep(i, j)
             Next j
-            avrD(i) = CInt(avrDsum(i) / AOdeepMAX)
-            avrH(i) = CInt(avrHsum(i) / AOdeepMAX)
-        Next i
+            avrD(i) = CInt(avrDsum(i) / ucBINdps1(i).AOdeepMAX)
+            avrH(i) = CInt(avrHsum(i) / ucBINdps1(i).AOdeepMAX)
     ''
-    ElseIf AOdeepCNT > 1 Then
+        ElseIf ucBINdps1(i).AOdeepCNT > 1 Then
     ''
-        txtAVRcnt = AOdeepCNT & "/" & AOdeepMAX
-        For i = 0 To NUM_OF_BIN - 1
-            For j = 0 To AOdeepCNT - 1
+            ucBINdps1(i).txtAVRcnt_Set ucBINdps1(i).AOdeepCNT & "/" & ucBINdps1(i).AOdeepMAX
+            For j = 0 To ucBINdps1(i).AOdeepCNT - 1
                 avrDsum(i) = avrDsum(i) + AOdeep(i, j)
                 avrHsum(i) = avrHsum(i) + Hdeep(i, j)
             Next j
-            avrD(i) = CInt(avrDsum(i) / AOdeepCNT)
-            avrH(i) = CInt(avrHsum(i) / AOdeepCNT)
-        Next i
+            avrD(i) = CInt(avrDsum(i) / ucBINdps1(i).AOdeepCNT)
+            avrH(i) = CInt(avrHsum(i) / ucBINdps1(i).AOdeepCNT)
     ''
-    Else
-        txtAVRcnt = AOdeepCNT & "/" & AOdeepMAX
-        For i = 0 To NUM_OF_BIN - 1
+        Else
+            ucBINdps1(i).txtAVRcnt_Set ucBINdps1(i).AOdeepCNT & "/" & ucBINdps1(i).AOdeepMAX
             avrD(i) = aaD(i)
             avrH(i) = aaH(i)
-        Next i
-    End If
+        End If
+    Next i
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''>AVR)
 
     ''set_avrHH for View

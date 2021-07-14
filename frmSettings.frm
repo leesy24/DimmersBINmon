@@ -12,6 +12,14 @@ Begin VB.Form frmSettings
    ScaleHeight     =   3090
    ScaleWidth      =   4680
    StartUpPosition =   3  'Windows 기본값
+   Begin VB.TextBox txtAOdeepMAX 
+      Height          =   270
+      Left            =   1320
+      TabIndex        =   7
+      Text            =   "99"
+      Top             =   2700
+      Width           =   615
+   End
    Begin VB.TextBox txtBinName 
       Height          =   270
       Left            =   1320
@@ -56,7 +64,7 @@ Begin VB.Form frmSettings
       Height          =   495
       Left            =   3600
       Style           =   1  '그래픽
-      TabIndex        =   8
+      TabIndex        =   9
       Top             =   2400
       Width           =   855
    End
@@ -65,7 +73,7 @@ Begin VB.Form frmSettings
       Height          =   375
       Left            =   3600
       Style           =   1  '그래픽
-      TabIndex        =   7
+      TabIndex        =   8
       Top             =   1920
       Width           =   855
    End
@@ -85,11 +93,27 @@ Begin VB.Form frmSettings
       Top             =   1275
       Width           =   615
    End
+   Begin VB.Label lbAOdeepMAX_ 
+      Caption         =   "10~99"
+      Height          =   255
+      Left            =   2040
+      TabIndex        =   26
+      Top             =   2760
+      Width           =   1095
+   End
+   Begin VB.Label lbAOdeepMAX 
+      Caption         =   "누적 횟수"
+      Height          =   255
+      Left            =   240
+      TabIndex        =   25
+      Top             =   2760
+      Width           =   975
+   End
    Begin VB.Label lbBinName 
       Caption         =   "Bin Name"
       Height          =   255
       Left            =   240
-      TabIndex        =   23
+      TabIndex        =   24
       Top             =   240
       Width           =   975
    End
@@ -97,7 +121,7 @@ Begin VB.Form frmSettings
       Caption         =   "cm,"
       Height          =   255
       Left            =   2040
-      TabIndex        =   22
+      TabIndex        =   23
       Top             =   2400
       Width           =   375
    End
@@ -105,7 +129,7 @@ Begin VB.Form frmSettings
       Caption         =   "cm,"
       Height          =   255
       Left            =   2040
-      TabIndex        =   21
+      TabIndex        =   22
       Top             =   2040
       Width           =   375
    End
@@ -113,7 +137,7 @@ Begin VB.Form frmSettings
       Caption         =   "높이 최소"
       Height          =   255
       Left            =   240
-      TabIndex        =   20
+      TabIndex        =   21
       Top             =   2400
       Width           =   975
    End
@@ -121,7 +145,7 @@ Begin VB.Form frmSettings
       Caption         =   "0~600"
       Height          =   255
       Left            =   2400
-      TabIndex        =   19
+      TabIndex        =   20
       Top             =   2400
       Width           =   1095
    End
@@ -129,7 +153,7 @@ Begin VB.Form frmSettings
       Caption         =   "높이 최대"
       Height          =   255
       Left            =   240
-      TabIndex        =   18
+      TabIndex        =   19
       Top             =   2040
       Width           =   975
    End
@@ -137,7 +161,7 @@ Begin VB.Form frmSettings
       Caption         =   "600~1200"
       Height          =   255
       Left            =   2400
-      TabIndex        =   17
+      TabIndex        =   18
       Top             =   2040
       Width           =   1095
    End
@@ -145,7 +169,7 @@ Begin VB.Form frmSettings
       Caption         =   "Bin IP addr"
       Height          =   255
       Left            =   240
-      TabIndex        =   11
+      TabIndex        =   12
       Top             =   600
       Width           =   975
    End
@@ -153,7 +177,7 @@ Begin VB.Form frmSettings
       Caption         =   "Bin IP port"
       Height          =   255
       Left            =   240
-      TabIndex        =   10
+      TabIndex        =   11
       Top             =   960
       Width           =   975
    End
@@ -161,7 +185,7 @@ Begin VB.Form frmSettings
       Caption         =   "Serial2Net의 IP"
       Height          =   255
       Left            =   2880
-      TabIndex        =   16
+      TabIndex        =   17
       Top             =   600
       Width           =   1575
    End
@@ -169,7 +193,7 @@ Begin VB.Form frmSettings
       Caption         =   "Serial2Net의 port"
       Height          =   255
       Left            =   2040
-      TabIndex        =   15
+      TabIndex        =   16
       Top             =   960
       Width           =   2295
    End
@@ -177,7 +201,7 @@ Begin VB.Form frmSettings
       Caption         =   "°, 48~-48"
       Height          =   255
       Left            =   2040
-      TabIndex        =   14
+      TabIndex        =   15
       Top             =   1680
       Width           =   975
    End
@@ -185,7 +209,7 @@ Begin VB.Form frmSettings
       Caption         =   "°, 10~-10"
       Height          =   255
       Left            =   2040
-      TabIndex        =   13
+      TabIndex        =   14
       Top             =   1320
       Width           =   975
    End
@@ -193,7 +217,7 @@ Begin VB.Form frmSettings
       Caption         =   "센서 기울기"
       Height          =   255
       Left            =   240
-      TabIndex        =   12
+      TabIndex        =   13
       Top             =   1680
       Width           =   975
    End
@@ -201,7 +225,7 @@ Begin VB.Form frmSettings
       Caption         =   "Bin 기울기"
       Height          =   255
       Left            =   240
-      TabIndex        =   9
+      TabIndex        =   10
       Top             =   1320
       Width           =   975
    End
@@ -221,8 +245,9 @@ Dim Index%
 Dim orgBinName$
 Dim orgBinIPAddr$, orgBinIPPort$, orgBinAngle$, orgSensorAngle$
 Dim orgBinMaxHH$, orgBinMinLH$
+Dim orgAOdeepMAX$
 
-Public Sub Init(Index_I%, Title_I$, BinName_I$, BinIPAddr_I$, BinIPPort_I$, BinAngle_I%, SensorAngle_I%, BinMaxHH_I%, BinMinLH_I%)
+Public Sub Init(Index_I%, Title_I$, BinName_I$, BinIPAddr_I$, BinIPPort_I$, BinAngle_I%, SensorAngle_I%, BinMaxHH_I%, BinMinLH_I%, AOdeepMAX_I$)
 '
     Index = Index_I
 '
@@ -251,6 +276,9 @@ Public Sub Init(Index_I%, Title_I$, BinName_I$, BinIPAddr_I$, BinIPPort_I$, BinA
 '
     orgBinMinLH = BinMinLH_I
     txtBinMinLH = BinMinLH_I
+'
+    orgAOdeepMAX = AOdeepMAX_I
+    txtAOdeepMAX = AOdeepMAX_I
 '
 End Sub
 
@@ -377,6 +405,30 @@ Private Sub cmdSettingsApply_Click()
         'IsApplied = True
     End If
 '
+    IsValid = False
+'
+    If txtAOdeepMAX <> orgAOdeepMAX Then
+        If IsNumeric(txtAOdeepMAX) = False _
+            Or CSng(CInt(Val(txtAOdeepMAX))) <> CSng(Val(txtAOdeepMAX)) _
+            Or CInt(Val(txtAOdeepMAX)) < 10! Or CInt(Val(txtAOdeepMAX)) > 99! _
+            Then
+            MsgBox lbAOdeepMAX & "는 10 ~ 99 사이의 정수 값 이어야 합니다.", vbOKOnly
+            isError_cmdSettingsApply = True
+        Else
+            orgAOdeepMAX = txtAOdeepMAX
+            SaveSetting App.Title, "Settings", "DeepMax_" & Index, txtBinAngle
+            IsValid = True
+        End If
+    End If
+'
+    If (IsValid = True) Then
+        frmMain.ucBINdps1(Index).AOdeepMAX = CInt(Val(txtAOdeepMAX))
+        frmMain.ucBINdps1(Index).AOdeepFull = False
+        frmMain.ucBINdps1(Index).AOdeepCNT = 0
+        frmMain.ucBINdps1(Index).txtAVRcnt_Set 0 & "/" & CInt(Val(txtAOdeepMAX))
+        'IsApplied = True
+    End If
+'
     'If (IsApplied = True) Then
     '    MsgBox "적용되었습니다.", vbOKOnly
     'End If
@@ -390,6 +442,18 @@ Private Sub cmdSettingsExit_Click()
     frmSettings.Visible = False
 '
     Unload Me
+'
+End Sub
+
+Private Sub lbAOdeepMAX__Click()
+'
+    frmCFG.tmrCFG_update
+'
+End Sub
+
+Private Sub lbAOdeepMAX_Click()
+'
+    frmCFG.tmrCFG_update
 '
 End Sub
 
@@ -476,6 +540,14 @@ Private Sub cmdSettingsApply_Update()
     If (isError_cmdSettingsApply = False) Then
         SendKeys "{tab}"    ' Set the focus to the next control.
     End If
+End Sub
+
+Private Sub txtAOdeepMAX_KeyPress(KeyAscii As Integer)
+'
+    If KeyAscii = 13 Then  ' The ENTER key.
+        cmdSettingsApply_Update
+    End If
+'
 End Sub
 
 Private Sub txtBinAngle_KeyPress(KeyAscii As Integer)
